@@ -1,27 +1,34 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { useState } from 'react';
+import TodoForm from './components/TodoForm';
+import SearchBar from './components/SearchBar';
+import SortButton from './components/SortButton';
+import TodoList from './components/TodoList';
+import { useTodos } from './hooks/useTodos';
+import './app.css';
 
 function App() {
-    const [todos, setTodos] = useState([]);
+    const handleEdit = updatedTodo => {
+        updateTodo(updatedTodo);
+    };
 
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/todos')
-            .then(res => res.json())
-            .then(data => setTodos(data.slice(0, 20)))
-            .catch(err => console.error('Ошибка загрузки:', err));
-    }, []);
+    const { todos, editTodo, setEditTodo, addTodo, updateTodo, deleteTodo } = useTodos();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isSorted, setIsSorted] = useState(false);
+
+    const filteredTodos = todos
+        .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()))
+        .sort((a, b) => (isSorted ? a.title.localeCompare(b.title) : 0));
 
     return (
-        <div className="app">
+        <>
             <h1>Todo List</h1>
-            <ul className="todo-list">
-                {todos.map(todo => (
-                    <li key={todo.id} className={todo.completed ? 'completed' : ''}>
-                        {todo.title}
-                    </li>
-                ))}
-            </ul>
-        </div>
+            <TodoForm onAdd={addTodo} onUpdate={updateTodo} editTodo={editTodo} />
+            <div className="search">
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                <SortButton isSorted={isSorted} setIsSorted={setIsSorted} />
+            </div>
+            <TodoList todos={filteredTodos} onDelete={deleteTodo} onEdit={handleEdit} />
+        </>
     );
 }
 
