@@ -24,7 +24,7 @@ function App() {
             <h1>Todo List</h1>
             <TodoForm onAdd={addTodo} onUpdate={updateTodo} editTodo={editTodo} />
             <div className="search">
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                <SearchBar setSearchQuery={setSearchQuery} />
                 <SortButton isSorted={isSorted} setIsSorted={setIsSorted} />
             </div>
             <TodoList todos={filteredTodos} onDelete={deleteTodo} onEdit={handleEdit} />
