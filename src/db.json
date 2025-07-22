@@ -4,6 +4,11 @@
       "title": "Новая задача",
       "completed": false,
       "id": 1
+    },
+    {
+      "title": "Вторая задача",
+      "completed": false,
+      "id": 2
     }
   ]
 }

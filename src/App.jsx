@@ -23,6 +23,7 @@ export default function App() {
                 <SearchBar onSearch={setSearch} />
                 <SortButton onToggle={setSortAlpha} />
             </div>
+
             <TodoList todos={visibleTodos} onEdit={updateTodo} onDelete={deleteTodo} />
         </div>
     );
