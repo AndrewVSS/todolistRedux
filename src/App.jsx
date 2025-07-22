@@ -1,35 +1,29 @@
 import { useState } from 'react';
+import { useTodos } from './hooks/useTodos';
 import TodoForm from './components/TodoForm';
+import TodoList from './components/TodoList';
 import SearchBar from './components/SearchBar';
 import SortButton from './components/SortButton';
-import TodoList from './components/TodoList';
-import { useTodos } from './hooks/useTodos';
-import './app.css';
+import './App.css';
 
-function App() {
-    const handleEdit = updatedTodo => {
-        updateTodo(updatedTodo);
-    };
+export default function App() {
+    const { todos, addTodo, updateTodo, deleteTodo } = useTodos();
+    const [search, setSearch] = useState('');
+    const [sortAlpha, setSortAlpha] = useState(false);
 
-    const { todos, editTodo, setEditTodo, addTodo, updateTodo, deleteTodo } = useTodos();
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isSorted, setIsSorted] = useState(false);
-
-    const filteredTodos = todos
-        .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()))
-        .sort((a, b) => (isSorted ? a.title.localeCompare(b.title) : 0));
+    const visibleTodos = todos
+        .filter(t => t.title.toLowerCase().includes(search.toLowerCase()))
+        .sort((a, b) => (sortAlpha ? a.title.localeCompare(b.title) : 0));
 
     return (
-        <>
+        <div>
             <h1>Todo List</h1>
-            <TodoForm onAdd={addTodo} onUpdate={updateTodo} editTodo={editTodo} />
+            <TodoForm onAdd={addTodo} />
             <div className="search">
-                <SearchBar setSearchQuery={setSearchQuery} />
-                <SortButton isSorted={isSorted} setIsSorted={setIsSorted} />
+                <SearchBar onSearch={setSearch} />
+                <SortButton onToggle={setSortAlpha} />
             </div>
-            <TodoList todos={filteredTodos} onDelete={deleteTodo} onEdit={handleEdit} />
-        </>
+            <TodoList todos={visibleTodos} onEdit={updateTodo} onDelete={deleteTodo} />
+        </div>
     );
 }
-
-export default App;

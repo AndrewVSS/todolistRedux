@@ -1,25 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
-import debounce from 'lodash.debounce';
+import { useState } from 'react';
 
-function SearchBar({ setSearchQuery }) {
-    const [inputValue, setInputValue] = useState('');
+function SearchBar({ onSearch }) {
+    const [input, setInput] = useState('');
 
-    const debouncedSetSearchQuery = useMemo(() => debounce(setSearchQuery, 400), [setSearchQuery]);
+    const handleChange = e => {
+        const value = e.target.value;
+        setInput(value);
+        if (onSearch) onSearch(value);
+    };
 
-    useEffect(() => {
-        debouncedSetSearchQuery(inputValue);
-
-        return () => debouncedSetSearchQuery.cancel();
-    }, [inputValue, debouncedSetSearchQuery]);
-
-    return (
-        <input
-            type="text"
-            placeholder="Поиск..."
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-        />
-    );
+    return <input type="text" placeholder="Поиск..." value={input} onChange={handleChange} />;
 }
 
 export default SearchBar;
