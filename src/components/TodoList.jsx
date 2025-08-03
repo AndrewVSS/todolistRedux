@@ -1,13 +1,15 @@
 import TodoItem from './TodoItem';
 
-export default function TodoList({ todos, onEdit, onDelete }) {
+function TodoList({ todos, onDelete, onEdit }) {
     if (todos.length === 0) return <p>Нет задач</p>;
 
     return (
         <ul>
             {todos.map(todo => (
-                <TodoItem key={todo.id} todo={todo} onEdit={onEdit} onDelete={onDelete} />
+                <TodoItem key={todo.id} todo={todo} onDelete={onDelete} onEdit={onEdit} />
             ))}
         </ul>
     );
 }
+
+export default TodoList;

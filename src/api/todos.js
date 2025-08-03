@@ -1,23 +1,33 @@
-import { ref, set, get, push, update, remove } from 'firebase/database';
-import { database } from '../firebase.js';
+const BASE_URL = 'http://localhost:3001/todos';
 
 export const fetchTodosAPI = async () => {
-    const snapshot = await get(ref(database, 'todos'));
-    if (!snapshot.exists()) return [];
-    const data = snapshot.val();
-    return Object.entries(data).map(([id, value]) => ({ id, ...value }));
+    const res = await fetch(BASE_URL);
+    if (!res.ok) throw new Error('Ошибка при загрузке');
+    return res.json();
 };
 
 export const addTodoAPI = async title => {
-    const newTodoRef = push(ref(database, 'todos'));
-    await set(newTodoRef, { title, completed: false });
-    return { id: newTodoRef.key, title, completed: false };
+    const res = await fetch(BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, completed: false }),
+    });
+    if (!res.ok) throw new Error('Ошибка при добавлении');
+    return res.json();
 };
 
 export const updateTodoAPI = async todo => {
-    await update(ref(database, `todos/${todo.id}`), todo);
+    const res = await fetch(`${BASE_URL}/${todo.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(todo),
+    });
+    if (!res.ok) throw new Error('Ошибка при обновлении');
 };
 
 export const deleteTodoAPI = async id => {
-    await remove(ref(database, `todos/${id}`));
+    const res = await fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Ошибка при удалении');
 };

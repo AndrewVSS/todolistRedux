@@ -1,17 +1,7 @@
-import { useState } from 'react';
-
-function SortButton({ onToggle }) {
-    const [active, setActive] = useState(false);
-
-    const handleClick = () => {
-        const next = !active;
-        setActive(next);
-        if (onToggle) onToggle(next);
-    };
-
+function SortButton({ isSorted, setIsSorted }) {
     return (
-        <button onClick={handleClick}>
-            {active ? 'Отменить сортировку' : 'Сортировать по алфавиту'}
+        <button onClick={() => setIsSorted(!isSorted)}>
+            {isSorted ? 'Сбросить сортировку' : 'Сортировать A-Z'}
         </button>
     );
 }

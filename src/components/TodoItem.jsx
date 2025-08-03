@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function TodoItem({ todo, onEdit, onDelete }) {
+export default function TodoItem({ todo, onDelete, onEdit }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(todo.title);
 

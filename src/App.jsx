@@ -1,30 +1,35 @@
 import { useState } from 'react';
-import { useTodos } from './hooks/useTodos';
 import TodoForm from './components/TodoForm';
-import TodoList from './components/TodoList';
 import SearchBar from './components/SearchBar';
 import SortButton from './components/SortButton';
-import './App.css';
+import TodoList from './components/TodoList';
+import { useTodos } from './hooks/useTodos';
+import './app.css';
 
-export default function App() {
-    const { todos, addTodo, updateTodo, deleteTodo } = useTodos();
-    const [search, setSearch] = useState('');
-    const [sortAlpha, setSortAlpha] = useState(false);
+function App() {
+    const handleEdit = updatedTodo => {
+        updateTodo(updatedTodo);
+    };
 
-    const visibleTodos = todos
-        .filter(t => t.title.toLowerCase().includes(search.toLowerCase()))
-        .sort((a, b) => (sortAlpha ? a.title.localeCompare(b.title) : 0));
+    const { todos, editTodo, setEditTodo, addTodo, updateTodo, deleteTodo } = useTodos();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isSorted, setIsSorted] = useState(false);
+
+    const filteredTodos = todos
+        .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()))
+        .sort((a, b) => (isSorted ? a.title.localeCompare(b.title) : 0));
 
     return (
-        <div>
+        <>
             <h1>Todo List</h1>
-            <TodoForm onAdd={addTodo} />
+            <TodoForm onAdd={addTodo} onUpdate={updateTodo} editTodo={editTodo} />
             <div className="search">
-                <SearchBar onSearch={setSearch} />
-                <SortButton onToggle={setSortAlpha} />
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                <SortButton isSorted={isSorted} setIsSorted={setIsSorted} />
             </div>
-
-            <TodoList todos={visibleTodos} onEdit={updateTodo} onDelete={deleteTodo} />
-        </div>
+            <TodoList todos={filteredTodos} onDelete={deleteTodo} onEdit={handleEdit} />
+        </>
     );
 }
+
+export default App;
