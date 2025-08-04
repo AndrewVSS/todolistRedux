@@ -1,35 +1,14 @@
-import { useState } from 'react';
-import TodoForm from './components/TodoForm';
-import SearchBar from './components/SearchBar';
-import SortButton from './components/SortButton';
-import TodoList from './components/TodoList';
-import { useTodos } from './hooks/useTodos';
-import './app.css';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import TaskPage from './pages/TaskPage';
+import NotFoundPage from './pages/NotFoundPage';
 
-function App() {
-    const handleEdit = updatedTodo => {
-        updateTodo(updatedTodo);
-    };
-
-    const { todos, editTodo, setEditTodo, addTodo, updateTodo, deleteTodo } = useTodos();
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isSorted, setIsSorted] = useState(false);
-
-    const filteredTodos = todos
-        .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()))
-        .sort((a, b) => (isSorted ? a.title.localeCompare(b.title) : 0));
-
+export default function App() {
     return (
-        <>
-            <h1>Todo List</h1>
-            <TodoForm onAdd={addTodo} onUpdate={updateTodo} editTodo={editTodo} />
-            <div className="search">
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                <SortButton isSorted={isSorted} setIsSorted={setIsSorted} />
-            </div>
-            <TodoList todos={filteredTodos} onDelete={deleteTodo} onEdit={handleEdit} />
-        </>
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/task/:id" element={<TaskPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+        </Routes>
     );
 }
-
-export default App;

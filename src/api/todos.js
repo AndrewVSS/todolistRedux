@@ -1,33 +1,9 @@
-const BASE_URL = 'http://localhost:3001/todos';
+import axios from 'axios';
 
-export const fetchTodosAPI = async () => {
-    const res = await fetch(BASE_URL);
-    if (!res.ok) throw new Error('Ошибка при загрузке');
-    return res.json();
-};
+const API_URL = 'http://localhost:3001/todos';
 
-export const addTodoAPI = async title => {
-    const res = await fetch(BASE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, completed: false }),
-    });
-    if (!res.ok) throw new Error('Ошибка при добавлении');
-    return res.json();
-};
-
-export const updateTodoAPI = async todo => {
-    const res = await fetch(`${BASE_URL}/${todo.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(todo),
-    });
-    if (!res.ok) throw new Error('Ошибка при обновлении');
-};
-
-export const deleteTodoAPI = async id => {
-    const res = await fetch(`${BASE_URL}/${id}`, {
-        method: 'DELETE',
-    });
-    if (!res.ok) throw new Error('Ошибка при удалении');
-};
+export const fetchTodosAPI = () => axios.get(API_URL);
+export const addTodoAPI = todo => axios.post(API_URL, todo);
+export const updateTodoAPI = todo => axios.put(`${API_URL}/${todo.id}`, todo);
+export const deleteTodoAPI = id => axios.delete(`${API_URL}/${id}`);
+export const fetchTodoById = id => axios.get(`${API_URL}/${id}`);
