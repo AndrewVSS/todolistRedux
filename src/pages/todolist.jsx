@@ -8,7 +8,6 @@ import './todolist.css';
 
 const TodoList = () => {
     const todos = useSelector(state => state.todos);
-    const filter = useSelector(state => state.filter);
     const searchQuery = useSelector(state => state.searchQuery || '');
     const isSorted = useSelector(state => state.isSorted);
 
