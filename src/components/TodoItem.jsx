@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-export default function TodoItem({ todo, onDelete, onEdit }) {
+export default function TodoItem({ todo }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(todo.title);
+    const dispatch = useDispatch();
 
     const handleSave = () => {
         const trimmed = editedTitle.trim();
@@ -11,8 +13,26 @@ export default function TodoItem({ todo, onDelete, onEdit }) {
             setEditedTitle(todo.title);
             return;
         }
-        onEdit({ ...todo, title: trimmed });
+
+        dispatch({
+            type: 'EDIT_TODO',
+            payload: { id: todo.id, title: trimmed },
+        });
         setIsEditing(false);
+    };
+
+    const handleDelete = () => {
+        dispatch({
+            type: 'REMOVE_TODO',
+            payload: todo.id,
+        });
+    };
+
+    const handleToggle = () => {
+        dispatch({
+            type: 'TOGGLE_TODO',
+            payload: todo.id,
+        });
     };
 
     return (
@@ -24,7 +44,15 @@ export default function TodoItem({ todo, onDelete, onEdit }) {
                     onKeyDown={e => e.key === 'Enter' && handleSave()}
                 />
             ) : (
-                <span>{todo.title}</span>
+                <span
+                    onClick={handleToggle}
+                    style={{
+                        textDecoration: todo.completed ? 'line-through' : 'none',
+                        cursor: 'pointer',
+                    }}
+                >
+                    {todo.title}
+                </span>
             )}
             <div className="buttons">
                 {isEditing ? (
@@ -32,7 +60,7 @@ export default function TodoItem({ todo, onDelete, onEdit }) {
                 ) : (
                     <button onClick={() => setIsEditing(true)}>✏️</button>
                 )}
-                <button onClick={() => onDelete(todo.id)}>🗑️</button>
+                <button onClick={handleDelete}>🗑️</button>
             </div>
         </li>
     );

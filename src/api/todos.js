@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/todos';
+const API_URL = 'http://localhost:3000/todos';
 
 export const fetchTodosAPI = () => axios.get(API_URL);
 export const addTodoAPI = todo => axios.post(API_URL, todo);

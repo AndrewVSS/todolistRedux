@@ -1,0 +1,15 @@
+li {
+    display: flex;
+    justify-content: space-between;
+}
+
+ul {
+    width: 500px;
+}
+
+.todo-table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

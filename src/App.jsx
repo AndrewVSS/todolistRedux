@@ -1,14 +1,14 @@
-import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import TaskPage from './pages/TaskPage';
-import NotFoundPage from './pages/NotFoundPage';
+import React from 'react';
+import TodoApp from './pages/todoapp.jsx';
+import './App.css';
 
-export default function App() {
+const App = () => {
     return (
-        <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/task/:id" element={<TaskPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <div className="container">
+            <h1>Список Дел</h1>
+            <TodoApp />
+        </div>
     );
-}
+};
+
+export default App;

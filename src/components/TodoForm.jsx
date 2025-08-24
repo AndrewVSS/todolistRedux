@@ -1,14 +1,25 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-function TodoForm({ onAdd }) {
+function TodoForm() {
     const [title, setTitle] = useState('');
+    const dispatch = useDispatch();
 
     const handleSubmit = e => {
         e.preventDefault();
         const trimmedTitle = title.trim();
 
-        onAdd(trimmedTitle);
-        setTitle('');
+        if (trimmedTitle) {
+            dispatch({
+                type: 'ADD_TODO',
+                payload: {
+                    id: Date.now(),
+                    title: trimmedTitle,
+                    completed: false,
+                },
+            });
+            setTitle('');
+        }
     };
 
     return (

@@ -1,46 +1,16 @@
-body {
+App {
     margin: 0;
     padding: 0;
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
 }
-
 h1 {
     text-align: center;
 }
 
-ul {
+.container {
     display: flex;
     flex-direction: column;
-    padding: 0;
-}
-li {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
-    position: relative;
-}
-.task-title {
-    flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.buttons {
-    display: flex;
-    gap: 8px;
-}
-
-form {
-    display: flex;
-    justify-content: space-between;
-}
-.search {
-    display: flex;
-    justify-content: space-between;
 }
