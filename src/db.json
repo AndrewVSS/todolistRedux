@@ -1,7 +1,7 @@
 {
   "todos": [
     {
-      "title": "Первая задача",
+      "title": "Первая",
       "completed": false,
       "id": 1
     },
@@ -11,12 +11,12 @@
       "id": 2
     },
     {
-      "title": "аукмукаукамлоориориодриодриоиоририодриори",
+      "title": "Таск",
       "completed": false,
       "id": 4
     },
     {
-      "title": "ferferferferferfefefefeferferfeferferferfefefeferf",
+      "title": "Второй таск",
       "completed": false,
       "id": 8
     },

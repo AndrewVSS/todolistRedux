@@ -1,66 +1,81 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateTodo, deleteTodo, toggleTodo } from '../action/thunk.js';
 
 export default function TodoItem({ todo }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(todo.title);
     const dispatch = useDispatch();
+    const loading = useSelector(state => state.todos.loading);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const trimmed = editedTitle.trim();
-        if (!trimmed || trimmed === todo.title) {
+
+        if (!trimmed) {
             setIsEditing(false);
             setEditedTitle(todo.title);
             return;
         }
 
-        dispatch({
-            type: 'EDIT_TODO',
-            payload: { id: todo.id, title: trimmed },
-        });
+        if (trimmed !== todo.title) {
+            await dispatch(updateTodo(todo.id, trimmed));
+        }
         setIsEditing(false);
     };
 
-    const handleDelete = () => {
-        dispatch({
-            type: 'REMOVE_TODO',
-            payload: todo.id,
-        });
+    const handleCancel = () => {
+        setEditedTitle(todo.title);
+        setIsEditing(false);
     };
 
-    const handleToggle = () => {
-        dispatch({
-            type: 'TOGGLE_TODO',
-            payload: todo.id,
-        });
+    const handleDelete = async () => {
+        await dispatch(deleteTodo(todo.id));
+    };
+
+    const handleToggle = async () => {
+        await dispatch(toggleTodo(todo.id));
     };
 
     return (
         <li className="todo-item">
             {isEditing ? (
-                <input
-                    value={editedTitle}
-                    onChange={e => setEditedTitle(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleSave()}
-                />
+                <div className="todo-item-edit">
+                    <input
+                        value={editedTitle}
+                        onChange={e => setEditedTitle(e.target.value)}
+                        disabled={loading}
+                        autoFocus
+                    />
+                </div>
             ) : (
                 <span
+                    className={`todo-item-text ${todo.completed ? 'completed' : ''}`}
                     onClick={handleToggle}
-                    style={{
-                        textDecoration: todo.completed ? 'line-through' : 'none',
-                        cursor: 'pointer',
-                    }}
                 >
                     {todo.title}
                 </span>
             )}
-            <div className="buttons">
+
+            <div className="todo-item-actions">
                 {isEditing ? (
-                    <button onClick={handleSave}>✅</button>
+                    <>
+                        <button onClick={handleSave} disabled={loading}>
+                            ✅
+                        </button>
+                        <button onClick={handleCancel} disabled={loading}>
+                            ❌
+                        </button>
+                    </>
                 ) : (
-                    <button onClick={() => setIsEditing(true)}>✏️</button>
+                    <>
+                        <button onClick={() => setIsEditing(true)} disabled={loading}>
+                            ✏️
+                        </button>
+                        <button className="delete" onClick={handleDelete} disabled={loading}>
+                            🗑️
+                        </button>
+                    </>
                 )}
-                <button onClick={handleDelete}>🗑️</button>
             </div>
         </li>
     );

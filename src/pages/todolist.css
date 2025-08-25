@@ -5,6 +5,7 @@ li {
 
 ul {
     width: 500px;
+    padding: 0;
 }
 
 .todo-table {
