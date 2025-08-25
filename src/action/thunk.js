@@ -87,10 +87,7 @@ export const updateTodo = (id, title) => async dispatch => {
 
     dispatch({ type: 'LOADING_START' });
     try {
-        // получаем текущую задачу
         const currentTodo = await fetchTodoByIdAPI(id);
-
-        // Обновляем title
         const updatedTodo = {
             ...currentTodo,
             title: title.trim(),
@@ -114,37 +111,6 @@ export const updateTodo = (id, title) => async dispatch => {
     }
 };
 
-// Переключение статуса выполнения
-export const toggleTodo = id => async dispatch => {
-    dispatch({ type: 'LOADING_START' });
-    try {
-        // Получаем текущую задачу
-        const currentTodo = await fetchTodoByIdAPI(id);
-
-        // Переключаем статус completed
-        const updatedTodo = {
-            ...currentTodo,
-            completed: !currentTodo.completed,
-        };
-
-        const data = await updateTodoAPI(updatedTodo);
-        dispatch({
-            type: 'TOGGLE_TODO',
-            payload: data,
-        });
-
-        console.log('Статус задачи изменен:', data);
-    } catch (error) {
-        console.error('Ошибка при изменении статуса:', error);
-        dispatch({
-            type: 'SET_ERROR',
-            payload: error.message,
-        });
-    } finally {
-        dispatch({ type: 'LOADING_END' });
-    }
-};
-
 // Удаление задачи
 export const deleteTodo = id => async dispatch => {
     dispatch({ type: 'LOADING_START' });
@@ -158,34 +124,6 @@ export const deleteTodo = id => async dispatch => {
         console.log('Задача успешно удалена:', id);
     } catch (error) {
         console.error('Ошибка при удалении задачи:', error);
-        dispatch({
-            type: 'SET_ERROR',
-            payload: error.message,
-        });
-    } finally {
-        dispatch({ type: 'LOADING_END' });
-    }
-};
-
-// Удаление всех завершенных задач
-export const deleteCompletedTodos = () => async (dispatch, getState) => {
-    const { todos } = getState();
-    const completedTodos = todos.filter(todo => todo.completed);
-
-    if (completedTodos.length === 0) {
-        console.log('Нет завершенных задач для удаления');
-        return;
-    }
-
-    dispatch({ type: 'LOADING_START' });
-    try {
-        // Удаляем все завершенные задачи
-        await Promise.all(completedTodos.map(todo => deleteTodoAPI(todo.id)));
-
-        dispatch({ type: 'REMOVE_COMPLETED_TODOS' });
-        console.log('Все завершенные задачи удалены');
-    } catch (error) {
-        console.error('Ошибка при удалении завершенных задач:', error);
         dispatch({
             type: 'SET_ERROR',
             payload: error.message,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateTodo, deleteTodo, toggleTodo } from '../action/thunk.js';
+import { updateTodo, deleteTodo } from '../action/thunk.js';
 
 export default function TodoItem({ todo }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -32,10 +32,6 @@ export default function TodoItem({ todo }) {
         await dispatch(deleteTodo(todo.id));
     };
 
-    const handleToggle = async () => {
-        await dispatch(toggleTodo(todo.id));
-    };
-
     return (
         <li className="todo-item">
             {isEditing ? (
@@ -48,10 +44,7 @@ export default function TodoItem({ todo }) {
                     />
                 </div>
             ) : (
-                <span
-                    className={`todo-item-text ${todo.completed ? 'completed' : ''}`}
-                    onClick={handleToggle}
-                >
+                <span className={`todo-item-text ${todo.completed ? 'completed' : ''}`}>
                     {todo.title}
                 </span>
             )}
